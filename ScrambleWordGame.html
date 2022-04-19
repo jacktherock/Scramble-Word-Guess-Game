@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Carter+One&family=EB+Garamond&family=Poppins:wght@700&family=Source+Sans+Pro&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Guess the word game</h1>
+    </header>
+
+    <section>
+        <div class="game-area">
+            <h3 class="msg"></h3>
+            <input type="text" class="hidden">
+            <button class="btn">Click here to start</button>
+        </div>
+    </section>
+
+    <script>
+        const msg = document.querySelector('.msg');
+        const guess = document.querySelector('input');
+        const btn = document.querySelector('.btn');
+        let play = false;
+        let newWords = ""
+        let randomWords = ""
+
+        let sWords = ['HTML', 'CSS', 'Python', 'Java', 'JavaScript', 'Swift', 'C++', 'C#', 'Ruby', 'Golang', 'Php',
+            'ReactJS', 'AngularJS', 'NextJS', 'Android', 'MySQL', 'Django', 'MongoDB'
+        ];
+
+        const createNewWords = () => {
+            // console.log(sWords)
+            let randomNum = Math.floor(Math.random() * sWords.length) // get random number between range of array
+            // console.log(randomNum)
+            let newTempSwords = sWords[randomNum] // using the random number get value of that index number
+            // console.log(newTempSwords)
+            // console.log(newTempSwords.split('')) // split -  split the word and store it in array
+            return newTempSwords
+        }
+
+        const scrambleWords = (arr) => {
+            for (let i = arr.length - 1; i >= 0; i--) {
+                let temp = arr[i]
+                // console.log(temp)
+                let j = Math.floor(Math.random() * (i + 1))
+                // console.log(i)
+                // console.log(j)
+
+                arr[i] = arr[j] // swap two indexes
+                arr[j] = temp
+            }
+            return arr;
+        }
+
+        btn.addEventListener('click', () => {
+            if (!play) {
+                play = true;
+                btn.innerHTML = "Guess";
+                guess.classList.toggle('hidden'); // show text after button clicked
+                // guess.style.display = 'block';
+                newWords = createNewWords();
+                randomWords = scrambleWords(newWords.split('')).join('');
+                // console.log(randomWords)
+                msg.innerHTML = `Guess the word: ${randomWords}`
+            } else {
+                let tempWord = guess.value;
+                // console.log(tempWord) 
+                if (tempWord === newWords) {
+                    // console.log('Correct')
+                    play = false;
+                    msg.innerHTML = `Guess is Correct. It's ${newWords}`
+                    btn.innerHTML = "Start Again"
+                    guess.classList.toggle('hidden');
+                    guess.value = ""
+                } else {
+                    msg.innerHTML = `Guess is Incorrect. Please try again! <br> Guess the word: ${randomWords}`
+                    // console.log('Incorrect')
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
